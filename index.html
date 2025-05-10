@@ -1,196 +1,60 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Math Magic - Hospital</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      background: #fff8e1;
-      text-align: center;
-      padding: 40px;
-    }
-    h1 {
-      font-size: 32px;
-      margin-bottom: 20px;
-    }
-    #question-box {
-      font-size: 24px;
-      margin: 20px;
-    }
-    .option {
-      display: block;
-      margin: 10px auto;
-      padding: 10px 20px;
-      font-size: 18px;
-      background-color: #f47e60;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      width: 200px;
-      cursor: pointer;
-    }
-    #feedback {
-      margin-top: 20px;
-      font-size: 20px;
-      font-weight: bold;
-    }
-    #coin-box {
-      font-size: 18px;
-      margin-top: 30px;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Math Magic - Welcome</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Hospital: Solve for Coins!</h1>
-  <div id="question-box">Loading...</div>
-  <div id="options-box"></div>
-  <div id="feedback"></div>
-  <div id="coin-box">Coins: 0 | Questions Solved: 0 / 20</div>
+  <h1>WELCOME</h1>
+  <div class="avatar-row">
+    <div class="avatar-option" data-avatar="mouse"><img src="a1.png" /></div>
+    <div class="avatar-option" data-avatar="cat"><img src="a2.png" /></div>
+    <div class="avatar-option" data-avatar="bear"><img src="a3.png" /></div>
+  </div>
 
-  
-  <script src="global.js"></script>
-  <script src="questionLoader.js"></script>
+  <select id="grade-select">
+    <option value="">-- Select Grade --</option>
+    <option value="0">K</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+  </select><br>
+
+  <button id="start-btn">START</button>
+
   <script>
+    document.querySelectorAll('.avatar-option').forEach(opt => {
+      opt.onclick = () => {
+        document.querySelectorAll('.avatar-option').forEach(o => o.classList.remove('selected'));
+        opt.classList.add('selected');
+        localStorage.setItem('mathMagicAvatar', opt.getAttribute('data-avatar'));
+        checkReady();
+      };
+    });
 
-// Universal Math Generator for Grades 0–5 based on difficulty level
+    document.getElementById('grade-select').onchange = () => {
+      localStorage.setItem('mathMagicGrade', document.getElementById('grade-select').value);
+      checkReady();
+    };
 
-function generateQuestion(grade, difficulty) {
-  const spec = getSpec(grade, difficulty);
-  if (!spec || spec.type === "-") return placeholderQuestion();
+    function checkReady() {
+      const grade = localStorage.getItem('mathMagicGrade');
+      const avatar = localStorage.getItem('mathMagicAvatar');
+      if (grade && avatar) {
+        document.getElementById('start-btn').style.display = 'inline-block';
+      }
+    }
 
-  switch (spec.type) {
-    case "addition": return generateAddition(spec);
-    case "subtraction": return generateSubtraction(spec);
-    case "multiplication": return generateMultiplication(spec);
-    case "division": return generateDivision(spec);
-    case "missing_addend": return generateMissingAddend(spec);
-    default: return placeholderQuestion();
-  }
-}
-
-function getSpec(grade, difficulty) {
-  return GENERATOR_SPEC.find(s => s.grade === grade && s.level === difficulty) || null;
-}
-
-function randomInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function shuffle(array) {
-  return array.sort(() => Math.random() - 0.5);
-}
-
-function placeholderQuestion() {
-  return {
-    text: "Placeholder question for this level.",
-    options: ["A", "B", "C", "D"],
-    answer: "A"
-  };
-}
-
-function generateAddition(spec) {
-  const a = randomInt(spec.range_min, spec.range_max);
-  const b = randomInt(spec.range_min, spec.range_max);
-  const answer = a + b;
-  const decoys = new Set([answer + 10, answer - 10]);
-  while (decoys.size < 3) {
-    const delta = randomInt(-5, 5);
-    const fake = answer + delta;
-    if (fake !== answer && fake > 0) decoys.add(fake);
-  }
-  const options = shuffle([answer, ...decoys]);
-  return {
-    text: `What is ${a} + ${b}?`,
-    options: options.map(String),
-    answer: answer.toString()
-  };
-}
-
-function generateSubtraction(spec) {
-  let a = randomInt(spec.range_min, spec.range_max);
-  let b = randomInt(spec.range_min, spec.range_max);
-  if (b > a) [a, b] = [b, a];
-  const answer = a - b;
-  const decoys = new Set([answer + 1, answer + 2]);
-  while (decoys.size < 3) {
-    const delta = randomInt(-5, 5);
-    const fake = answer + delta;
-    if (fake !== answer && fake >= 0) decoys.add(fake);
-  }
-  const options = shuffle([answer, ...decoys]);
-  return {
-    text: `What is ${a} - ${b}?`,
-    options: options.map(String),
-    answer: answer.toString()
-  };
-}
-
-function generateMultiplication(spec) {
-  const a = randomInt(spec.range_min, spec.range_max);
-  const b = randomInt(spec.range_min, spec.range_max);
-  const answer = a * b;
-  const decoys = new Set([answer + 1, answer + 2]);
-  while (decoys.size < 3) {
-    const delta = randomInt(-10, 10);
-    const fake = answer + delta;
-    if (fake !== answer && fake >= 0) decoys.add(fake);
-  }
-  const options = shuffle([answer, ...decoys]);
-  return {
-    text: `What is ${a} × ${b}?`,
-    options: options.map(String),
-    answer: answer.toString()
-  };
-}
-
-function generateDivision(spec) {
-  const b = randomInt(spec.range_min, spec.range_max);
-  const answer = randomInt(1, 10);
-  const a = b * answer;
-  const decoys = new Set([answer + 1, answer + 2]);
-  while (decoys.size < 3) {
-    const fake = answer + randomInt(-3, 3);
-    if (fake !== answer && fake > 0) decoys.add(fake);
-  }
-  const options = shuffle([answer, ...decoys]);
-  return {
-    text: `What is ${a} ÷ ${b}?`,
-    options: options.map(String),
-    answer: answer.toString()
-  };
-}
-
-function generateMissingAddend(spec) {
-  const b = randomInt(spec.range_min, spec.range_max);
-  const answer = randomInt(spec.range_min, spec.range_max);
-  const total = answer + b;
-  const decoys = new Set([answer + 1, answer - 1]);
-  while (decoys.size < 3) {
-    const fake = answer + randomInt(-5, 5);
-    if (fake !== answer && fake > 0) decoys.add(fake);
-  }
-  const options = shuffle([answer, ...decoys]);
-  return {
-    text: `__ + ${b} = ${total}`,
-    options: options.map(String),
-    answer: answer.toString()
-  };
-}
-
-// NOTE: Replace this with actual data injected from Excel
-const GENERATOR_SPEC = [
-  { grade: 1, level: 1, type: "addition", range_min: 1, range_max: 10 },
-  { grade: 1, level: 2, type: "addition", range_min: 10, range_max: 99 },
-  { grade: 1, level: 3, type: "subtraction", range_min: 1, range_max: 20 },
-  { grade: 1, level: 4, type: "subtraction", range_min: 10, range_max: 99 },
-  { grade: 1, level: 5, type: "missing_addend", range_min: 10, range_max: 99 },
-  // Extend for all grades
-];
-
-</script>
-
+    document.getElementById('start-btn').onclick = () => {
+      window.location.href = 'map_index.html';
+    };
+  </script>
 </body>
 </html>
