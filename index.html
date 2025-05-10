@@ -2,142 +2,47 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Select Your Avatar</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Math Magic - Welcome</title>
   <style>
-    body {
-      font-family: sans-serif;
-      background: #fdf0da;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin: 0;
-      padding: 20px;
-    }
-    h1 {
-      font-size: 24px;
-      margin-bottom: 20px;
-    }
-    .carousel {
-      display: flex;
-      overflow: hidden;
-      width: 300px;
-      height: 300px;
-      position: relative;
-    }
-    .carousel-track {
-      display: flex;
-      transition: transform 0.3s ease;
-    }
-    .avatar {
-      min-width: 300px;
-      height: 300px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: #ffe;
-      border-radius: 12px;
-      margin: 0 5px;
-    }
-    .avatar img {
-      max-width: 100%;
-      max-height: 100%;
-    }
-    .controls {
-      margin-top: 20px;
-      display: flex;
-      gap: 20px;
-      align-items: center;
-    }
-    .btn {
-      font-size: 24px;
-      background: none;
-      border: none;
-      cursor: pointer;
-    }
-    .next-btn {
-      background-color: #f47e60;
-      color: white;
-      padding: 10px 30px;
-      border-radius: 12px;
-      font-weight: bold;
-      font-size: 18px;
-      border: none;
-      margin-top: 20px;
-    }
+    body { background: #fdf0da; font-family: sans-serif; text-align: center; padding: 30px; }
+    h1 { font-size: 36px; }
+    .avatar-row { display: flex; justify-content: center; gap: 20px; margin: 20px 0; }
+    .avatar-option { border: 4px solid transparent; border-radius: 12px; padding: 4px; cursor: pointer; }
+    .avatar-option.selected { border-color: #f47e60; }
+    .avatar-option img { width: 100px; }
+    select, button { margin-top: 20px; padding: 10px 20px; font-size: 18px; border-radius: 8px; }
+    button { background: #f47e60; color: white; font-weight: bold; cursor: pointer; display: none; }
   </style>
 </head>
 <body>
-  <h1>Select Your Avatar</h1>
-  <div class="carousel" id="carousel">
-    <div class="carousel-track" id="track">
-  <div class="avatar"><img src="avatar1.png" alt="Avatar 1"></div>
-  <div class="avatar"><img src="avatar2.png" alt="Avatar 2"></div>
-  <div class="avatar"><img src="avatar3.png" alt="Avatar 3"></div>
-  <div class="avatar"><img src="avatar4.png" alt="Avatar 4"></div>
-  <div class="avatar"><img src="avatar5.png" alt="Avatar 5"></div>
-  <div class="avatar"><img src="avatar6.png" alt="Avatar 6"></div>
-  <div class="avatar"><img src="avatar7.png" alt="Avatar 7"></div>
-  <div class="avatar"><img src="avatar8.png" alt="Avatar 8"></div>
-  <div class="avatar"><img src="avatar9.png" alt="Avatar 9"></div>
-</div>
-  <div class="avatar"><img src="avatar2.png" alt="Avatar 2"></div>
-  <div class="avatar"><img src="avatar3.png" alt="Avatar 3"></div>
-  <div class="avatar"><img src="avatar4.png" alt="Avatar 4"></div>
-  <div class="avatar"><img src="avatar5.png" alt="Avatar 5"></div>
-  <div class="avatar"><img src="avatar6.png" alt="Avatar 6"></div>
-  <div class="avatar"><img src="avatar7.png" alt="Avatar 7"></div>
-  <div class="avatar"><img src="avatar8.png" alt="Avatar 8"></div>
-  <div class="avatar"><img src="avatar9.png" alt="Avatar 9"></div>
-</div>
-  <div class="avatar"><img src="avatar2.png" alt="Avatar 2"></div>
-  <div class="avatar"><img src="avatar3.png" alt="Avatar 3"></div>
-  <div class="avatar"><img src="avatar4.png" alt="Avatar 4"></div>
-  <div class="avatar"><img src="avatar5.png" alt="Avatar 5"></div>
-  <div class="avatar"><img src="avatar6.png" alt="Avatar 6"></div>
-  <div class="avatar"><img src="avatar7.png" alt="Avatar 7"></div>
-  <div class="avatar"><img src="avatar8.png" alt="Avatar 8"></div>
-  <div class="avatar"><img src="avatar9.png" alt="Avatar 9"></div>
-  <div class="avatar"><img src="avatar10.png" alt="Avatar 10"></div>
-  <div class="avatar"><img src="avatar11.png" alt="Avatar 11"></div>
-  <div class="avatar"><img src="avatar12.png" alt="Avatar 12"></div>
-  <div class="avatar"><img src="avatar13.png" alt="Avatar 13"></div>
-  <div class="avatar"><img src="avatar14.png" alt="Avatar 14"></div>
-  <div class="avatar"><img src="avatar15.png" alt="Avatar 15"></div>
-  <div class="avatar"><img src="avatar16.png" alt="Avatar 16"></div>
-  <div class="avatar"><img src="avatar17.png" alt="Avatar 17"></div>
-  <div class="avatar"><img src="avatar18.png" alt="Avatar 18"></div>
-</div>
-  <div class="avatar"><img src="avatar2.png" alt="Avatar 2"></div>
-  <div class="avatar"><img src="avatar3.png" alt="Avatar 3"></div>
-  <div class="avatar"><img src="avatar4.png" alt="Avatar 4"></div>
-  <div class="avatar"><img src="avatar5.png" alt="Avatar 5"></div>
-  <div class="avatar"><img src="avatar6.png" alt="Avatar 6"></div>
-  <div class="avatar"><img src="avatar7.png" alt="Avatar 7"></div>
-  <div class="avatar"><img src="avatar8.png" alt="Avatar 8"></div>
-  <div class="avatar"><img src="avatar9.png" alt="Avatar 9"></div>
-  <div class="avatar"><img src="avatar10.png" alt="Avatar 10"></div>
-  <div class="avatar"><img src="avatar11.png" alt="Avatar 11"></div>
-  <div class="avatar"><img src="avatar12.png" alt="Avatar 12"></div>
-  <div class="avatar"><img src="avatar13.png" alt="Avatar 13"></div>
-  <div class="avatar"><img src="avatar14.png" alt="Avatar 14"></div>
-  <div class="avatar"><img src="avatar15.png" alt="Avatar 15"></div>
-  <div class="avatar"><img src="avatar16.png" alt="Avatar 16"></div>
-  <div class="avatar"><img src="avatar17.png" alt="Avatar 17"></div>
-  <div class="avatar"><img src="avatar18.png" alt="Avatar 18"></div>
-</div>
-      <div class="avatar"><img src="avatar2.png" alt="Avatar 2"></div>
-      <div class="avatar"><img src="avatar3.png" alt="Avatar 3"></div>
-      <div class="avatar"><img src="avatar4.png" alt="Avatar 4"></div>
-      <div class="avatar"><img src="avatar5.png" alt="Avatar 5"></div>
-    </div>
+  <h1>WELCOME</h1>
+  <div class="avatar-row">
+    <div class="avatar-option" data-avatar="mouse"><img src="avatar1.png"></div>
+    <div class="avatar-option" data-avatar="cat"><img src="avatar2.png"></div>
+    <div class="avatar-option" data-avatar="bear"><img src="avatar3.png"></div>
   </div>
-  <div class="controls">
-    <button class="btn" onclick="moveCarousel(-1)">&#8592;</button>
-    <button class="btn" onclick="moveCarousel(1)">&#8594;</button>
-  </div>
-  <button class="next-btn">Next</button>
-
-  <script src="main.js"></script>
+  <select id="grade-select">
+    <option value="">-- Select Grade --</option>
+    <option value="K">K</option><option value="1">1</option><option value="2">2</option>
+    <option value="3">3</option><option value="4">4</option><option value="5">5</option>
+  </select><br>
+  <button id="start-btn" onclick="window.location.href='map_index.html'">START</button>
+  <script>
+    let selected = false;
+    document.querySelectorAll('.avatar-option').forEach(opt => {
+      opt.onclick = () => {
+        document.querySelectorAll('.avatar-option').forEach(o => o.classList.remove('selected'));
+        opt.classList.add('selected');
+        selected = true;
+        checkReady();
+      };
+    });
+    document.getElementById('grade-select').onchange = checkReady;
+    function checkReady() {
+      const grade = document.getElementById('grade-select').value;
+      if (grade && selected) document.getElementById('start-btn').style.display = 'inline-block';
+    }
+  </script>
 </body>
 </html>
