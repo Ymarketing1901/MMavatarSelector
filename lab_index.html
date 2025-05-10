@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Math Magic - Science Lab</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #e0f7fa;
+      text-align: center;
+      padding: 40px;
+    }
+    h1 {
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+    #question-box {
+      font-size: 24px;
+      margin: 20px;
+    }
+    input {
+      padding: 10px;
+      font-size: 18px;
+      width: 100px;
+      text-align: center;
+    }
+    button {
+      padding: 10px 20px;
+      margin-left: 10px;
+      font-size: 18px;
+      background-color: #00796b;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    #feedback {
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+    #progress {
+      font-size: 18px;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Science Lab: Solve to Unlock Secrets!</h1>
+  <div id="question-box">Loading...</div>
+  <input type="text" id="answer" />
+  <button onclick="submitAnswer()">Submit</button>
+  <div id="feedback"></div>
+  <div id="progress">Questions Solved: 0 / 20</div>
+
+  <script>
+    const questions = [{"text": "Type the answer: 1 + 1", "answer": "2"}, {"text": "Type the answer: 2 + 2", "answer": "4"}, {"text": "Type the answer: 3 - 1", "answer": "2"}, {"text": "Type the answer: 4 - 2", "answer": "2"}, {"text": "Type the answer: 2 + 3", "answer": "5"}, {"text": "Type the answer: 1 + 1", "answer": "2"}, {"text": "Type the answer: 2 + 2", "answer": "4"}, {"text": "Type the answer: 3 - 1", "answer": "2"}, {"text": "Type the answer: 4 - 2", "answer": "2"}, {"text": "Type the answer: 2 + 3", "answer": "5"}, {"text": "Type the answer: 1 + 1", "answer": "2"}, {"text": "Type the answer: 2 + 2", "answer": "4"}, {"text": "Type the answer: 3 - 1", "answer": "2"}, {"text": "Type the answer: 4 - 2", "answer": "2"}, {"text": "Type the answer: 2 + 3", "answer": "5"}, {"text": "Type the answer: 1 + 1", "answer": "2"}, {"text": "Type the answer: 2 + 2", "answer": "4"}, {"text": "Type the answer: 3 - 1", "answer": "2"}, {"text": "Type the answer: 4 - 2", "answer": "2"}, {"text": "Type the answer: 2 + 3", "answer": "5"}];
+    let index = 0;
+
+    function loadQuestion() {
+      if (index >= questions.length) {
+        document.getElementById("question-box").textContent = "You completed the Science Lab!";
+        document.getElementById("answer").style.display = "none";
+        document.querySelector("button").style.display = "none";
+        document.getElementById("feedback").textContent = "You’ve unlocked the next challenge!";
+        return;
+      }
+      const q = questions[index];
+      document.getElementById("question-box").textContent = q.text;
+      document.getElementById("answer").value = "";
+      document.getElementById("feedback").textContent = "";
+    }
+
+    function submitAnswer() {
+      const input = document.getElementById("answer").value.trim();
+      const correct = questions[index].answer;
+      if (input === correct) {
+        index++;
+        document.getElementById("feedback").textContent = "Correct!";
+      } else {
+        document.getElementById("feedback").textContent = "Try again.";
+        return;
+      }
+      document.getElementById("progress").textContent = `Questions Solved: ${index} / 20`;
+      loadQuestion();
+    }
+
+    loadQuestion();
+  </script>
+</body>
+</html>
