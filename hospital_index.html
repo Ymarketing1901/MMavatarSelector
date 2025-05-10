@@ -2,8 +2,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Math Magic - Hospital</title>
   <style>
     body {
@@ -45,77 +45,89 @@
 </head>
 <body>
   <h1>Hospital: Solve for Coins!</h1>
+  <div id="score">Score: 0</div>
   <div id="question-box">Loading...</div>
   <div id="options-box"></div>
   <div id="feedback"></div>
   <div id="coin-box">Coins: 0 | Questions Solved: 0 / 20</div>
 
-  
-  <script src="global.js"></script>
-  <script src="questionLoader.js"></script>
   <script>
-    let index = 0;
-    let coins = 0;
-    let questions = [];
+    let score = 0;
+    let current;
+    let attempt = 0;
+
+    function generateAdditionQuestion() {
+      const a = Math.floor(Math.random() * 90) + 10;
+      const b = Math.floor(Math.random() * 90) + 10;
+      const answer = a + b;
+
+      const decoys = new Set();
+      if (answer - 10 > 0) decoys.add(answer - 10);
+      decoys.add(answer + 10);
+      while (decoys.size < 3) {
+        const offset = Math.floor(Math.random() * 11) - 5;
+        const decoy = answer + offset;
+        if (decoy !== answer && decoy > 0) decoys.add(decoy);
+      }
+
+      const options = shuffle([answer, ...decoys]);
+
+      return {
+        text: `What is ${a} + ${b}?`,
+        options,
+        answer: answer.toString()
+      };
+    }
+
+    function generatePlaceholderQuestion() {
+      return {
+        text: "Placeholder question. Replace with real generator.",
+        options: ["A", "B", "C", "D"],
+        answer: "A"
+      };
+    }
 
     function shuffle(array) {
       return array.sort(() => Math.random() - 0.5);
     }
 
-    function loadQuestion() {
-      if (index >= 20) {
-        document.getElementById("question-box").textContent = "You've completed the Hospital!";
-        document.getElementById("options-box").innerHTML = "";
-        document.getElementById("feedback").textContent = "Science Lab Unlocked!";
-        return;
-      }
+    function showQuestion() {
+      attempt = 0;
+      const grade = localStorage.getItem("mathMagicGrade");
+      current = (grade === "1") ? generateAdditionQuestion() : generatePlaceholderQuestion();
 
-      const q = questions[index];
-      document.getElementById("question-box").textContent = q.text;
-      const optionsBox = document.getElementById("options-box");
-      optionsBox.innerHTML = "";
-      shuffle([...q.options]).forEach(opt => {
+      document.getElementById("question-box").textContent = current.text;
+      const box = document.getElementById("options-box");
+      box.innerHTML = "";
+      current.options.forEach(opt => {
         const btn = document.createElement("button");
         btn.className = "option";
         btn.textContent = opt;
-        btn.onclick = () => submitAnswer(opt);
-        optionsBox.appendChild(btn);
+        btn.onclick = () => checkAnswer(opt);
+        box.appendChild(btn);
       });
       document.getElementById("feedback").textContent = "";
     }
 
-    function submitAnswer(selected) {
-      const correct = questions[index].answer;
-      if (selected === correct) {
-        coins++;
-        index++;
-        document.getElementById("feedback").textContent = "Correct!";
-        setTimeout(loadQuestion, 1000);
+    function checkAnswer(selected) {
+      const feedback = document.getElementById("feedback");
+      if (selected == current.answer) {
+        if (attempt === 0) {
+          score++;
+          document.getElementById("score").textContent = `Score: ${score}`;
+        }
+        feedback.textContent = "Correct!";
+        setTimeout(showQuestion, 1000);
       } else {
-        document.getElementById("feedback").textContent = `Oops! The answer was ${correct}.`;
-        index++;
-        setTimeout(loadQuestion, 2000);
+        if (attempt === 0) {
+          feedback.textContent = `Oops! The answer was ${current.answer}.`;
+          setTimeout(showQuestion, 2000);
+        }
       }
-      document.getElementById("coin-box").textContent = `Coins: ${coins} | Questions Solved: ${index} / 20`;
-    } else {
-        document.getElementById("feedback").textContent = "Try again.";
-        return;
-      }
-      document.getElementById("coin-box").textContent = `Coins: ${coins} | Questions Solved: ${index} / 20`;
-      loadQuestion();
+      attempt++;
     }
 
-    const grade = localStorage.getItem("mathMagicGrade") || "1";
-    getQuestionSet({
-      grade,
-      land: 1,
-      building: "hospital",
-      callback: (loadedQuestions) => {
-        questions = loadedQuestions.slice(0, 50);
-        loadQuestion();
-      }
-    });
+    showQuestion();
   </script>
-
 </body>
 </html>
