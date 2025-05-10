@@ -46,8 +46,6 @@
       margin-top: 30px;
     }
   </style>
-  <script src="global.js"></script>
-  <script src="questionLoader.js"></script>
 </head>
 <body>
   <h1>Science Lab: Solve to Unlock Secrets!</h1>
@@ -58,15 +56,15 @@
   <div id="progress">Questions Solved: 0 / 20</div>
 
   <script>
+    const questions = [{"text": "Type the answer: 1 + 1", "answer": "2"}, {"text": "Type the answer: 2 + 2", "answer": "4"}, {"text": "Type the answer: 3 - 1", "answer": "2"}, {"text": "Type the answer: 4 - 2", "answer": "2"}, {"text": "Type the answer: 2 + 3", "answer": "5"}, {"text": "Type the answer: 1 + 1", "answer": "2"}, {"text": "Type the answer: 2 + 2", "answer": "4"}, {"text": "Type the answer: 3 - 1", "answer": "2"}, {"text": "Type the answer: 4 - 2", "answer": "2"}, {"text": "Type the answer: 2 + 3", "answer": "5"}, {"text": "Type the answer: 1 + 1", "answer": "2"}, {"text": "Type the answer: 2 + 2", "answer": "4"}, {"text": "Type the answer: 3 - 1", "answer": "2"}, {"text": "Type the answer: 4 - 2", "answer": "2"}, {"text": "Type the answer: 2 + 3", "answer": "5"}, {"text": "Type the answer: 1 + 1", "answer": "2"}, {"text": "Type the answer: 2 + 2", "answer": "4"}, {"text": "Type the answer: 3 - 1", "answer": "2"}, {"text": "Type the answer: 4 - 2", "answer": "2"}, {"text": "Type the answer: 2 + 3", "answer": "5"}];
     let index = 0;
-    let questions = [];
 
     function loadQuestion() {
-      if (index >= 20) {
+      if (index >= questions.length) {
         document.getElementById("question-box").textContent = "You completed the Science Lab!";
         document.getElementById("answer").style.display = "none";
         document.querySelector("button").style.display = "none";
-        document.getElementById("feedback").textContent = "Well done!";
+        document.getElementById("feedback").textContent = "You’ve unlocked the next challenge!";
         return;
       }
       const q = questions[index];
@@ -81,7 +79,6 @@
       if (input === correct) {
         index++;
         document.getElementById("feedback").textContent = "Correct!";
-        addCoin();
       } else {
         document.getElementById("feedback").textContent = "Try again.";
         return;
@@ -90,16 +87,7 @@
       loadQuestion();
     }
 
-    const grade = localStorage.getItem("mathMagicGrade") || "1";
-    getQuestionSet({
-      grade,
-      land: 1,
-      building: "lab",
-      callback: (loadedQuestions) => {
-        questions = loadedQuestions;
-        loadQuestion();
-      }
-    });
+    loadQuestion();
   </script>
 </body>
 </html>
