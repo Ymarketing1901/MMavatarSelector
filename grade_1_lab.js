@@ -1,4 +1,4 @@
-const grade_1_lab = {
+window.grade_1_lab = {
   "easy": [
     {
       "text": "Type the answer: 1 + 1",

@@ -1,4 +1,4 @@
-const grade_1_hospital = {
+window.grade_1_hospital = {
   "easy": [
     {
       "text": "What is 2 + 2?",
