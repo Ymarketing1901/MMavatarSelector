@@ -1,0 +1,59 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Math Magic - Welcome</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>WELCOME</h1>
+  <div class="avatar-row">
+    <div class="avatar-option" data-avatar="mouse"><img src="avatar1.png" /></div>
+    <div class="avatar-option" data-avatar="cat"><img src="avatar2.png" /></div>
+    <div class="avatar-option" data-avatar="bear"><img src="avatar3.png" /></div>
+  </div>
+
+  <select id="grade-select">
+    <option value="">-- Select Grade --</option>
+    <option value="0">K</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+  </select><br>
+
+  <button id="start-btn">START</button>
+
+  <script>
+    document.querySelectorAll('.avatar-option').forEach(opt => {
+      opt.onclick = () => {
+        document.querySelectorAll('.avatar-option').forEach(o => o.classList.remove('selected'));
+        opt.classList.add('selected');
+        localStorage.setItem('mathMagicAvatar', opt.getAttribute('data-avatar'));
+        checkReady();
+      };
+    });
+
+    document.getElementById('grade-select').onchange = () => {
+      localStorage.setItem('mathMagicGrade', document.getElementById('grade-select').value);
+      checkReady();
+    };
+
+    function checkReady() {
+      const grade = localStorage.getItem('mathMagicGrade');
+      const avatar = localStorage.getItem('mathMagicAvatar');
+      if (grade && avatar) {
+        document.getElementById('start-btn').style.display = 'inline-block';
+      }
+    }
+
+    document.getElementById('start-btn').onclick = () => {
+      window.location.href = 'map_index.html';
+    };
+  </script>
+</body>
+</html>
