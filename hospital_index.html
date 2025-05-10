@@ -2,8 +2,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Math Magic - Hospital</title>
   <style>
     body {
@@ -45,25 +45,57 @@
 </head>
 <body>
   <h1>Hospital: Solve for Coins!</h1>
+  <div id="score">Score: 0</div>
   <div id="question-box">Loading...</div>
   <div id="options-box"></div>
   <div id="feedback"></div>
   <div id="coin-box">Coins: 0 | Questions Solved: 0 / 20</div>
 
-  
-  <script src="global.js"></script>
-  <script src="questionLoader.js"></script>
   <script>
-
-    const grade = parseInt(localStorage.getItem("mathMagicGrade") || "1");
-    const difficulty = 1; // difficulty maps directly from land 1–5
     let score = 0;
     let current;
     let attempt = 0;
 
+    function generateAdditionQuestion() {
+      const a = Math.floor(Math.random() * 90) + 10;
+      const b = Math.floor(Math.random() * 90) + 10;
+      const answer = a + b;
+
+      const decoys = new Set();
+      if (answer - 10 > 0) decoys.add(answer - 10);
+      decoys.add(answer + 10);
+      while (decoys.size < 3) {
+        const offset = Math.floor(Math.random() * 11) - 5;
+        const decoy = answer + offset;
+        if (decoy !== answer && decoy > 0) decoys.add(decoy);
+      }
+
+      const options = shuffle([answer, ...decoys]);
+
+      return {
+        text: `What is ${a} + ${b}?`,
+        options,
+        answer: answer.toString()
+      };
+    }
+
+    function generatePlaceholderQuestion() {
+      return {
+        text: "Placeholder question. Replace with real generator.",
+        options: ["A", "B", "C", "D"],
+        answer: "A"
+      };
+    }
+
+    function shuffle(array) {
+      return array.sort(() => Math.random() - 0.5);
+    }
+
     function showQuestion() {
       attempt = 0;
-      current = generateQuestion(grade, difficulty);
+      const grade = localStorage.getItem("mathMagicGrade");
+      current = (grade === "1") ? generateAdditionQuestion() : generatePlaceholderQuestion();
+
       document.getElementById("question-box").textContent = current.text;
       const box = document.getElementById("options-box");
       box.innerHTML = "";
@@ -96,8 +128,6 @@
     }
 
     showQuestion();
-
-</script>
-
+  </script>
 </body>
 </html>
