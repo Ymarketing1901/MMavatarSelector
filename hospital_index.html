@@ -42,6 +42,8 @@
       margin-top: 30px;
     }
   </style>
+  <script src="global.js"></script>
+  <script src="questionLoader.js"></script>
 </head>
 <body>
   <h1>Hospital: Solve for Coins!</h1>
@@ -51,7 +53,7 @@
   <div id="coin-box">Coins: 0 | Questions Solved: 0 / 20</div>
 
   <script>
-    const questions = [{"text": "What is 2 + 3?", "options": ["4", "5", "6", "7"], "answer": "5"}, {"text": "Which is even?", "options": ["1", "3", "6", "5"], "answer": "6"}];
+    // get questions dynamically [{"text": "What is 2 + 3?", "options": ["4", "5", "6", "7"], "answer": "5"}, {"text": "Which is even?", "options": ["1", "3", "6", "5"], "answer": "6"}];
     let index = 0;
     let coins = 0;
 
@@ -88,10 +90,32 @@
         return;
       }
       document.getElementById("coin-box").textContent = `Coins: ${coins} | Questions Solved: ${index} / 20`;
-      loadQuestion();
+      
+const grade = localStorage.getItem("mathMagicGrade") || "1";
+getQuestionSet({
+  grade,
+  land: 1,
+  building: "hospital",
+  callback: (questions) => {
+    window.questions = questions;
+    loadQuestion();
+  }
+});
+
     }
 
+    
+const grade = localStorage.getItem("mathMagicGrade") || "1";
+getQuestionSet({
+  grade,
+  land: 1,
+  building: "hospital",
+  callback: (questions) => {
+    window.questions = questions;
     loadQuestion();
+  }
+});
+
   </script>
 </body>
 </html>

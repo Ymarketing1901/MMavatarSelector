@@ -46,6 +46,8 @@
       margin-top: 30px;
     }
   </style>
+  <script src="global.js"></script>
+  <script src="questionLoader.js"></script>
 </head>
 <body>
   <h1>Science Lab: Solve to Unlock Secrets!</h1>
@@ -56,7 +58,7 @@
   <div id="progress">Questions Solved: 0 / 20</div>
 
   <script>
-    const questions = [{"text": "Type the answer: 1 + 1", "answer": "2"}, {"text": "Type the answer: 2 + 2", "answer": "4"}, {"text": "Type the answer: 3 - 1", "answer": "2"}, {"text": "Type the answer: 4 - 2", "answer": "2"}, {"text": "Type the answer: 2 + 3", "answer": "5"}, {"text": "Type the answer: 1 + 1", "answer": "2"}, {"text": "Type the answer: 2 + 2", "answer": "4"}, {"text": "Type the answer: 3 - 1", "answer": "2"}, {"text": "Type the answer: 4 - 2", "answer": "2"}, {"text": "Type the answer: 2 + 3", "answer": "5"}, {"text": "Type the answer: 1 + 1", "answer": "2"}, {"text": "Type the answer: 2 + 2", "answer": "4"}, {"text": "Type the answer: 3 - 1", "answer": "2"}, {"text": "Type the answer: 4 - 2", "answer": "2"}, {"text": "Type the answer: 2 + 3", "answer": "5"}, {"text": "Type the answer: 1 + 1", "answer": "2"}, {"text": "Type the answer: 2 + 2", "answer": "4"}, {"text": "Type the answer: 3 - 1", "answer": "2"}, {"text": "Type the answer: 4 - 2", "answer": "2"}, {"text": "Type the answer: 2 + 3", "answer": "5"}];
+    // get questions dynamically [{"text": "Type the answer: 1 + 1", "answer": "2"}, {"text": "Type the answer: 2 + 2", "answer": "4"}, {"text": "Type the answer: 3 - 1", "answer": "2"}, {"text": "Type the answer: 4 - 2", "answer": "2"}, {"text": "Type the answer: 2 + 3", "answer": "5"}, {"text": "Type the answer: 1 + 1", "answer": "2"}, {"text": "Type the answer: 2 + 2", "answer": "4"}, {"text": "Type the answer: 3 - 1", "answer": "2"}, {"text": "Type the answer: 4 - 2", "answer": "2"}, {"text": "Type the answer: 2 + 3", "answer": "5"}, {"text": "Type the answer: 1 + 1", "answer": "2"}, {"text": "Type the answer: 2 + 2", "answer": "4"}, {"text": "Type the answer: 3 - 1", "answer": "2"}, {"text": "Type the answer: 4 - 2", "answer": "2"}, {"text": "Type the answer: 2 + 3", "answer": "5"}, {"text": "Type the answer: 1 + 1", "answer": "2"}, {"text": "Type the answer: 2 + 2", "answer": "4"}, {"text": "Type the answer: 3 - 1", "answer": "2"}, {"text": "Type the answer: 4 - 2", "answer": "2"}, {"text": "Type the answer: 2 + 3", "answer": "5"}];
     let index = 0;
 
     function loadQuestion() {
@@ -84,10 +86,32 @@
         return;
       }
       document.getElementById("progress").textContent = `Questions Solved: ${index} / 20`;
-      loadQuestion();
+      
+const grade = localStorage.getItem("mathMagicGrade") || "1";
+getQuestionSet({
+  grade,
+  land: 1,
+  building: "lab",
+  callback: (questions) => {
+    window.questions = questions;
+    loadQuestion();
+  }
+});
+
     }
 
+    
+const grade = localStorage.getItem("mathMagicGrade") || "1";
+getQuestionSet({
+  grade,
+  land: 1,
+  building: "lab",
+  callback: (questions) => {
+    window.questions = questions;
     loadQuestion();
+  }
+});
+
   </script>
 </body>
 </html>
