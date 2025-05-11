@@ -31,4 +31,79 @@
       border-radius: 12px;
       cursor: pointer;
       border: 4px solid transparent;
-      transition: border-color 0.3s, transform 0
+      transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .avatar:hover {
+      transform: scale(1.05);
+    }
+
+    .avatar.selected {
+      border-color: #ff69b4;
+    }
+
+    select, button {
+      font-size: 18px;
+      padding: 10px 15px;
+      margin-top: 20px;
+    }
+
+    #start-btn {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome to Math Magic</h1>
+
+  <h2>Select Your Avatar</h2>
+  <div class="avatar-selection">
+    <img src="a1.png" alt="Avatar 1" class="avatar" onclick="selectAvatar(1)">
+    <img src="a2.png" alt="Avatar 2" class="avatar" onclick="selectAvatar(2)">
+    <img src="a3.png" alt="Avatar 3" class="avatar" onclick="selectAvatar(3)">
+  </div>
+
+  <h2>Select Your Grade</h2>
+  <select id="grade-select" onchange="checkReady()">
+    <option value="">-- Select Grade --</option>
+    <option value="0">Kindergarten</option>
+    <option value="1">1st Grade</option>
+    <option value="2">2nd Grade</option>
+    <option value="3">3rd Grade</option>
+    <option value="4">4th Grade</option>
+    <option value="5">5th Grade</option>
+  </select>
+
+  <br>
+  <button id="start-btn" onclick="startGame()">Start</button>
+
+  <script>
+    let selectedAvatar = null;
+
+    function selectAvatar(id) {
+      selectedAvatar = `a${id}`;
+      document.querySelectorAll('.avatar').forEach(img => img.classList.remove('selected'));
+      document.querySelector(`.avatar-selection img:nth-child(${id})`).classList.add('selected');
+      checkReady();
+    }
+
+    function checkReady() {
+      const grade = document.getElementById("grade-select").value;
+      const startBtn = document.getElementById("start-btn");
+      if (grade !== "" && selectedAvatar !== null) {
+        startBtn.style.display = "inline-block";
+      } else {
+        startBtn.style.display = "none";
+      }
+    }
+
+    function startGame() {
+      const grade = document.getElementById("grade-select").value;
+      localStorage.setItem("mathMagicGrade", grade);
+      localStorage.setItem("mathMagicAvatar", selectedAvatar);
+      localStorage.setItem("mathMagicLand", "1"); // Starting in Wooden Village
+      window.location.href = "map_map.html";
+    }
+  </script>
+</body>
+</html>
