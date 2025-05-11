@@ -1,60 +1,78 @@
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Math Magic - Welcome</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <h1>WELCOME</h1>
-  <div class="avatar-row">
-    <div class="avatar-option" data-avatar="mouse"><img src="a1.png" /></div>
-    <div class="avatar-option" data-avatar="cat"><img src="a2.png" /></div>
-    <div class="avatar-option" data-avatar="bear"><img src="a3.png" /></div>
-  </div>
-
-  <select id="grade-select">
-    <option value="">-- Select Grade --</option>
-    <option value="0">K</option>
-    <option value="1">1</option>
-    <option value="2">2</option>
-    <option value="3">3</option>
-    <option value="4">4</option>
-    <option value="5">5</option>
-    <option value="6">6</option>
-  </select><br>
-
-  <button id="start-btn">START</button>
-
-  <script>
-    document.querySelectorAll('.avatar-option').forEach(opt => {
-      opt.onclick = () => {
-        document.querySelectorAll('.avatar-option').forEach(o => o.classList.remove('selected'));
-        opt.classList.add('selected');
-        localStorage.setItem('mathMagicAvatar', opt.getAttribute('data-avatar'));
-        checkReady();
-      };
-    });
-
-    document.getElementById('grade-select').onchange = () => {
-      localStorage.setItem('mathMagicGrade', document.getElementById('grade-select').value);
-      checkReady();
-    };
-
-    function checkReady() {
-      const grade = localStorage.getItem('mathMagicGrade');
-      const avatar = localStorage.getItem('mathMagicAvatar');
-      if (grade && avatar) {
-        document.getElementById('start-btn').style.display = 'inline-block';
-      }
+  <title>Math Magic</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 40px;
+      background: #fff0f5;
     }
 
-    document.getElementById('start-btn').onclick = () => {
-      window.location.href = 'map_index.html';
-    };
-  </script>
-</body>
-</html>
+    h1 {
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+
+    .avatar-selection {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    .avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 12px;
+      cursor: pointer;
+      border: 4px solid transparent;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .avatar:hover {
+      transform: scale(1.05);
+    }
+
+    .avatar.selected {
+      border-color: #ff69b4;
+    }
+
+    select, button {
+      font-size: 18px;
+      padding: 10px 15px;
+      margin-top: 20px;
+    }
+
+    #start-btn {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome to Math Magic</h1>
+
+  <h2>Select Your Avatar</h2>
+  <div class="avatar-selection">
+    <img src="a1.png" alt="Avatar 1" class="avatar" onclick="selectAvatar(1)">
+    <img src="a2.png" alt="Avatar 2" class="avatar" onclick="selectAvatar(2)">
+    <img src="a3.png" alt="Avatar 3" class="avatar" onclick="selectAvatar(3)">
+  </div>
+
+  <h2>Select Your Grade</h2>
+  <select id="grade-select" onchange="checkReady()">
+    <option value="">-- Select Grade --</option>
+    <option value="0">Kindergarten</option>
+    <option value="1">1st Grade</option>
+    <option value="2">2nd Grade</option>
+    <option value="3">3rd Grade</option>
+    <option value="4">4th Grade</option>
+    <option value="5">5th Grade</option>
+  </select>
+
+  <br>
+  <button id="start-btn" onclick="
