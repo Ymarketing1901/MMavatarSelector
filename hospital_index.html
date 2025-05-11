@@ -7,7 +7,8 @@
   <style>
     body {
       font-family: sans-serif;
-      background: #fff8e1;
+      background: url('https://cdn.pixabay.com/photo/2017/01/31/13/14/hospital-2027764_960_720.png') no-repeat center center fixed;
+      background-size: cover;
       text-align: center;
       padding: 40px;
     }
@@ -48,6 +49,8 @@
   <div id="question-box">Loading...</div>
   <div id="options-box"></div>
   <div id="feedback"></div>
+<div id="coin-box">Coins: 0</div>
+<a id="lab-link" href="lab_index.html" style="display:none; font-size: 20px; margin-top: 20px; display: block;">🔬 Go to Science Lab</a>
 
   <script>
 const GENERATOR_SPEC = [
@@ -257,7 +260,10 @@ function generateQuestion(grade, difficulty) {
   }
 }
 
+
 let score = 0;
+let coins = 0;
+let correctAnswers = 0;
 let current;
 let attempt = 0;
 const grade = parseInt(localStorage.getItem("mathMagicGrade") || "1");
@@ -265,6 +271,14 @@ const land = parseInt(localStorage.getItem("mathMagicLand") || "1");
 const difficulty = Math.min(Math.max(land, 1), 5);
 
 function showQuestion() {
+  if (correctAnswers >= 100) {
+    document.getElementById("question-box").textContent = "🏥 The hospital is now closed — all patients are cured!";
+    document.getElementById("options-box").innerHTML = "";
+    document.getElementById("feedback").textContent = "";
+    document.getElementById("lab-link").style.display = "none";
+    return;
+  }
+
   attempt = 0;
   current = generateQuestion(grade, difficulty);
   document.getElementById("question-box").textContent = current.text;
@@ -285,7 +299,17 @@ function checkAnswer(selected) {
   if (selected == current.answer) {
     if (attempt === 0) {
       score++;
-      document.getElementById("score").textContent = `Score: ${score}`;
+      coins += 2;
+      correctAnswers++;
+      document.getElementById("score").textContent = `Correct: ${score}`;
+      document.getElementById("coin-box").textContent = `Coins: ${coins}`;
+      if (correctAnswers >= 20) {
+        document.getElementById("lab-link").style.display = "block";
+      }
+      if (correctAnswers >= 100) {
+        setTimeout(showQuestion, 500);
+        return;
+      }
     }
     feedback.textContent = "Correct!";
     setTimeout(showQuestion, 1000);
@@ -297,6 +321,7 @@ function checkAnswer(selected) {
   }
   attempt++;
 }
+
 
 showQuestion();
 </script>
