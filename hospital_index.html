@@ -1,9 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Math Magic - Hospital</title>
   <style>
     body {
@@ -37,44 +36,110 @@
       font-size: 20px;
       font-weight: bold;
     }
-    #coin-box {
+    #score {
       font-size: 18px;
       margin-top: 30px;
     }
   </style>
 </head>
 <body>
-  <h1>Hospital: Solve for Coins!</h1>
+  <h1>Hospital: Solve to Heal!</h1>
+  <div id="score">Score: 0</div>
   <div id="question-box">Loading...</div>
   <div id="options-box"></div>
   <div id="feedback"></div>
-  <div id="coin-box">Coins: 0 | Questions Solved: 0 / 20</div>
 
-  
-  <script src="global.js"></script>
-  <script src="questionLoader.js"></script>
   <script>
+const GENERATOR_SPEC = [
+  { grade: 0, level: 1, type: "addition", range_min: 1, range_max: 5 },
+  { grade: 0, level: 2, type: "addition", range_min: 1, range_max: 10 },
+  { grade: 0, level: 3, type: "addition", range_min: 1, range_max: 15 },
+  { grade: 0, level: 4, type: "addition", range_min: 1, range_max: 20 },
+  { grade: 0, level: 5, type: "addition", range_min: 1, range_max: 25 },
+  { grade: 1, level: 1, type: "addition", range_min: 10, range_max: 99 },
+  { grade: 1, level: 2, type: "addition", range_min: 1, range_max: 5 },
+  { grade: 1, level: 3, type: "addition", range_min: 10, range_max: 99 },
+  { grade: 1, level: 4, type: "addition", range_min: 10, range_max: 99 },
+  { grade: 1, level: 5, type: "addition", range_min: 10, range_max: 99 },
+  { grade: 1, level: 2, type: "subtraction", range_min: 1, range_max: 10 },
+  { grade: 1, level: 3, type: "subtraction", range_min: 10, range_max: 99 },
+  { grade: 1, level: 4, type: "subtraction", range_min: 10, range_max: 99 },
+  { grade: 1, level: 5, type: "subtraction", range_min: 10, range_max: 99 },
+  { grade: 2, level: 1, type: "addition", range_min: 10, range_max: 99 },
+  { grade: 2, level: 2, type: "addition", range_min: 10, range_max: 99 },
+  { grade: 2, level: 3, type: "addition", range_min: 100, range_max: 999 },
+  { grade: 2, level: 4, type: "addition", range_min: 100, range_max: 999 },
+  { grade: 2, level: 5, type: "addition", range_min: 100, range_max: 999 },
+  { grade: 2, level: 1, type: "subtraction", range_min: 10, range_max: 99 },
+  { grade: 2, level: 2, type: "subtraction", range_min: 10, range_max: 99 },
+  { grade: 2, level: 3, type: "subtraction", range_min: 10, range_max: 99 },
+  { grade: 2, level: 4, type: "subtraction", range_min: 100, range_max: 999 },
+  { grade: 2, level: 5, type: "subtraction", range_min: 100, range_max: 999 },
+  { grade: 2, level: 1, type: "multiplication", range_min: 1, range_max: 10 },
+  { grade: 2, level: 2, type: "multiplication", range_min: 1, range_max: 10 },
+  { grade: 2, level: 3, type: "multiplication", range_min: 1, range_max: 10 },
+  { grade: 2, level: 4, type: "multiplication", range_min: 1, range_max: 10 },
+  { grade: 2, level: 5, type: "multiplication", range_min: 1, range_max: 9 },
+  { grade: 3, level: 1, type: "addition", range_min: 100, range_max: 999 },
+  { grade: 3, level: 2, type: "addition", range_min: 100, range_max: 999 },
+  { grade: 3, level: 3, type: "addition", range_min: 100, range_max: 999 },
+  { grade: 3, level: 4, type: "addition", range_min: 100, range_max: 999 },
+  { grade: 3, level: 5, type: "addition", range_min: 100, range_max: 999 },
+  { grade: 3, level: 1, type: "subtraction", range_min: 100, range_max: 999 },
+  { grade: 3, level: 2, type: "subtraction", range_min: 100, range_max: 999 },
+  { grade: 3, level: 3, type: "subtraction", range_min: 100, range_max: 999 },
+  { grade: 3, level: 4, type: "subtraction", range_min: 100, range_max: 999 },
+  { grade: 3, level: 5, type: "subtraction", range_min: 100, range_max: 999 },
+  { grade: 3, level: 1, type: "multiplication", range_min: 1, range_max: 10 },
+  { grade: 3, level: 2, type: "multiplication", range_min: 1, range_max: 9 },
+  { grade: 3, level: 3, type: "multiplication", range_min: 10, range_max: 99 },
+  { grade: 3, level: 4, type: "multiplication", range_min: 10, range_max: 99 },
+  { grade: 3, level: 5, type: "multiplication", range_min: 10, range_max: 99 },
+  { grade: 3, level: 5, type: "division", range_min: 10, range_max: 99 },
+  { grade: 4, level: 1, type: "addition", range_min: 100, range_max: 999 },
+  { grade: 4, level: 2, type: "addition", range_min: 100, range_max: 999 },
+  { grade: 4, level: 3, type: "addition", range_min: 100, range_max: 999 },
+  { grade: 4, level: 4, type: "addition", range_min: 100, range_max: 999 },
+  { grade: 4, level: 5, type: "addition", range_min: 1, range_max: 10 },
+  { grade: 4, level: 1, type: "subtraction", range_min: 100, range_max: 999 },
+  { grade: 4, level: 2, type: "subtraction", range_min: 100, range_max: 999 },
+  { grade: 4, level: 3, type: "subtraction", range_min: 100, range_max: 999 },
+  { grade: 4, level: 4, type: "subtraction", range_min: 100, range_max: 999 },
+  { grade: 4, level: 5, type: "subtraction", range_min: 100, range_max: 999 },
+  { grade: 4, level: 1, type: "multiplication", range_min: 10, range_max: 99 },
+  { grade: 4, level: 2, type: "multiplication", range_min: 10, range_max: 99 },
+  { grade: 4, level: 3, type: "multiplication", range_min: 10, range_max: 99 },
+  { grade: 4, level: 4, type: "multiplication", range_min: 10, range_max: 99 },
+  { grade: 4, level: 5, type: "multiplication", range_min: 10, range_max: 99 },
+  { grade: 4, level: 1, type: "division", range_min: 10, range_max: 99 },
+  { grade: 4, level: 2, type: "division", range_min: 10, range_max: 99 },
+  { grade: 4, level: 3, type: "division", range_min: 100, range_max: 999 },
+  { grade: 4, level: 4, type: "division", range_min: 100, range_max: 999 },
+  { grade: 4, level: 5, type: "division", range_min: 100, range_max: 999 },
+  { grade: 5, level: 1, type: "addition", range_min: 100, range_max: 999 },
+  { grade: 5, level: 2, type: "addition", range_min: 1, range_max: 10 },
+  { grade: 5, level: 3, type: "addition", range_min: 1, range_max: 10 },
+  { grade: 5, level: 4, type: "addition", range_min: 1, range_max: 10 },
+  { grade: 5, level: 5, type: "addition", range_min: 1, range_max: 10 },
+  { grade: 5, level: 1, type: "subtraction", range_min: 100, range_max: 999 },
+  { grade: 5, level: 2, type: "subtraction", range_min: 100, range_max: 999 },
+  { grade: 5, level: 3, type: "subtraction", range_min: 1, range_max: 10 },
+  { grade: 5, level: 4, type: "subtraction", range_min: 1, range_max: 10 },
+  { grade: 5, level: 5, type: "subtraction", range_min: 1, range_max: 10 },
+  { grade: 5, level: 1, type: "multiplication", range_min: 10, range_max: 99 },
+  { grade: 5, level: 2, type: "multiplication", range_min: 10, range_max: 99 },
+  { grade: 5, level: 3, type: "multiplication", range_min: 10, range_max: 99 },
+  { grade: 5, level: 4, type: "multiplication", range_min: 10, range_max: 99 },
+  { grade: 5, level: 5, type: "multiplication", range_min: 10, range_max: 99 },
+  { grade: 5, level: 1, type: "division", range_min: 100, range_max: 999 },
+  { grade: 5, level: 2, type: "division", range_min: 100, range_max: 999 },
+  { grade: 5, level: 3, type: "division", range_min: 100, range_max: 999 },
+  { grade: 5, level: 4, type: "division", range_min: 100, range_max: 999 },
+  { grade: 5, level: 5, type: "division", range_min: 10, range_max: 99 },
+];
 
-// Universal Math Generator for Grades 0–5 based on difficulty level
 
-function generateQuestion(grade, difficulty) {
-  const spec = getSpec(grade, difficulty);
-  if (!spec || spec.type === "-") return placeholderQuestion();
-
-  switch (spec.type) {
-    case "addition": return generateAddition(spec);
-    case "subtraction": return generateSubtraction(spec);
-    case "multiplication": return generateMultiplication(spec);
-    case "division": return generateDivision(spec);
-    case "missing_addend": return generateMissingAddend(spec);
-    default: return placeholderQuestion();
-  }
-}
-
-function getSpec(grade, difficulty) {
-  return GENERATOR_SPEC.find(s => s.grade === grade && s.level === difficulty) || null;
-}
-
+// Utility functions
 function randomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -91,6 +156,7 @@ function placeholderQuestion() {
   };
 }
 
+// Generators per type
 function generateAddition(spec) {
   const a = randomInt(spec.range_min, spec.range_max);
   const b = randomInt(spec.range_min, spec.range_max);
@@ -180,17 +246,67 @@ function generateMissingAddend(spec) {
   };
 }
 
-// NOTE: Replace this with actual data injected from Excel
-const GENERATOR_SPEC = [
-  { grade: 1, level: 1, type: "addition", range_min: 1, range_max: 10 },
-  { grade: 1, level: 2, type: "addition", range_min: 10, range_max: 99 },
-  { grade: 1, level: 3, type: "subtraction", range_min: 1, range_max: 20 },
-  { grade: 1, level: 4, type: "subtraction", range_min: 10, range_max: 99 },
-  { grade: 1, level: 5, type: "missing_addend", range_min: 10, range_max: 99 },
-  // Extend for all grades
-];
+// Universal entry point
+function generateQuestion(grade, difficulty) {
+  const options = GENERATOR_SPEC.filter(
+    s => s.grade === grade && s.level === difficulty
+  );
+  const spec = options.length ? options[Math.floor(Math.random() * options.length)] : null;
 
+  if (!spec || spec.type === "-") return placeholderQuestion();
+
+  switch (spec.type) {
+    case "addition": return generateAddition(spec);
+    case "subtraction": return generateSubtraction(spec);
+    case "multiplication": return generateMultiplication(spec);
+    case "division": return generateDivision(spec);
+    case "missing_addend": return generateMissingAddend(spec);
+    default: return placeholderQuestion();
+  }
+}
+
+let score = 0;
+let current;
+let attempt = 0;
+const grade = parseInt(localStorage.getItem("mathMagicGrade") || "1");
+const land = parseInt(localStorage.getItem("mathMagicLand") || "1");
+const difficulty = Math.min(Math.max(land, 1), 5);
+
+function showQuestion() {
+  attempt = 0;
+  current = generateQuestion(grade, difficulty);
+  document.getElementById("question-box").textContent = current.text;
+  const box = document.getElementById("options-box");
+  box.innerHTML = "";
+  current.options.forEach(opt => {
+    const btn = document.createElement("button");
+    btn.className = "option";
+    btn.textContent = opt;
+    btn.onclick = () => checkAnswer(opt);
+    box.appendChild(btn);
+  });
+  document.getElementById("feedback").textContent = "";
+}
+
+function checkAnswer(selected) {
+  const feedback = document.getElementById("feedback");
+  if (selected == current.answer) {
+    if (attempt === 0) {
+      score++;
+      document.getElementById("score").textContent = `Score: ${score}`;
+    }
+    feedback.textContent = "Correct!";
+    setTimeout(showQuestion, 1000);
+  } else {
+    if (attempt === 0) {
+      feedback.textContent = `Oops! The answer was ${current.answer}.`;
+      setTimeout(showQuestion, 2000);
+    }
+  }
+  attempt++;
+}
+
+showQuestion();
 </script>
-
 </body>
 </html>
